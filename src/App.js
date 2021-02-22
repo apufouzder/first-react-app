@@ -1,20 +1,36 @@
 import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from 'react';
 
 function App() {
-  const myArray = ['apu', 'pranto', 'ratan', 'kamal']
+  const myArray = ['apu', 'pranto', 'ratan', 'kamal', 'Jamal']
   const products = [
-    { name: 'Photoshop', price: '$99.99', pra: 'Create precise designs, Illustrations, and vector graphics on desktop and iPad.' },
-    { name: 'Acrobat Pro', price: '$55.99', pra: 'Create precise designs, Illustrations, and vector graphics on desktop and iPad.' },
-    { name: 'Premiere Pro', price: '$49.99', pra: 'Create precise designs, Illustrations, and vector graphics on desktop and iPad.' },
+    { name: 'Photoshop', price: '$99.99' },
+    { name: 'Acrobat Pro', price: '$55.99' },
+    { name: 'Premiere Pro', price: '$49.99' },
+    { name: 'Premiere Galo', price: '$40.99' }
   ]
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
+        {/* State component Counter */}
+        <Counter></Counter>
+        <Users></Users>
+        <ul>
+          {
+            myArray.map(friend => <li>{friend}</li>)
+          }
+          {
+            products.map(pd => <li>{pd.name}</li>)
+          }
+          {
+            products.map(pd => <Product product={pd}></Product>)
+          }
+        </ul>
+
         <Product product={products[0]}></Product>
         <Product product={products[1]}></Product>
-        <Product product={products[2]}></Product>
 
         <Person name={myArray[0]}></Person>
         <Person name={myArray[2]}></Person>
@@ -24,6 +40,45 @@ function App() {
     </div>
   );
 }
+
+// Load dynamic data, API call useEffect integrate state
+function Users(){
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then(res => res.json())
+    .then(data => setUsers(data))
+  }, [])
+  return(
+    <div>
+      <h1>Dynamic Users: {users.length}</h1>
+      <ul>
+        {
+         console.log(users)
+        }
+        {
+          users.map(user => <li>{user.name}</li>) 
+        }
+      </ul>
+    </div>
+  )
+}
+// Load dynamic data, API call useEffect integrate state
+
+// Start State function
+function Counter(){
+  const [count, setCount] = useState(10);
+  const handleIncrease = () => setCount(count + 1);
+  return(
+    <div>
+      <h1>Count: {count}</h1>
+      <button onMouseMove={() => setCount(count + 1)}>Increase</button>
+      <button onClick={() => setCount(count - 1)}>Decrease</button>
+    </div>
+  )
+}
+// End State function
 
 function Product(props) {
   const productStyle = {
@@ -37,7 +92,7 @@ function Product(props) {
     background: '#182338'
   }
   const { name, price, pra } = props.product;
-  console.log(props);
+  // console.log(props);
   return (
     <div style={productStyle}>
       <h4>{name}</h4>
